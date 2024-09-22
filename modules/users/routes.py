@@ -80,40 +80,43 @@ def update():
 
     firm_query = database.select(Firm).where(Firm.firm_name == form.firm.data)
     firm: Firm = database.session.execute(firm_query).scalar_one_or_none()
-    if form.validate_on_submit():
+    if firm:
+        if form.validate_on_submit():
 
-        if user is None:
-            try:
-                user = User(
-                    email=form.email.data,
-                    password=form.password.data,
-                    first_name=form.fname.data,
-                    last_name=form.lname.data,
-                    role=form.role.data,
-                )
-                user.firm = firm
+            if user is None:
+                try:
+                    user = User(
+                        email=form.email.data,
+                        password=form.password.data,
+                        first_name=form.fname.data,
+                        last_name=form.lname.data,
+                        role=form.role.data,
+                    )
+                    user.firm = firm
 
-                database.session.add(user)
-                database.session.commit()
-                flash(f"Thanks, user added: {user.email}!")
-                current_app.logger.debug(f"Added user: {form.email.data}!")
-                return redirect("../all")
-            except IntegrityError:
-                database.session.rollback()
-                flash(f"ERROR! Email ({form.email.data}) already exists.", "error")
+                    database.session.add(user)
+                    database.session.commit()
+                    flash(f"Thanks, user added: {user.email}!")
+                    current_app.logger.debug(f"Added user: {form.email.data}!")
+                    return redirect("../all")
+                except IntegrityError:
+                    database.session.rollback()
+                    flash(f"ERROR! Email ({form.email.data}) already exists.", "error")
+            else:
+                try:
+                    user.update(request)
+                    user.firm = firm
+                    database.session.add(user)
+                    database.session.commit()
+                    flash(f"Thanks, user updated: {user.email}!")
+                    current_app.logger.debug(f"Updated user: {form.email.data}!")
+                    return redirect("../all")
+                except IntegrityError:
+                    database.session.rollback()
+                    flash(f"ERROR! Email ({form.email.data}) already exists.", "error")
         else:
-            try:
-                user.update(request)
-                user.firm = firm
-                database.session.add(user)
-                database.session.commit()
-                flash(f"Thanks, user updated: {user.email}!")
-                current_app.logger.debug(f"Updated user: {form.email.data}!")
-                return redirect("../all")
-            except IntegrityError:
-                database.session.rollback()
-                flash(f"ERROR! Email ({form.email.data}) already exists.", "error")
+            flash(f"Error in form data!")
     else:
-        flash(f"Error in form data!")
+        flash(f"Firm: {form.firm.data} does not exist")
 
     return render_template("user_profile.html", form=form)
