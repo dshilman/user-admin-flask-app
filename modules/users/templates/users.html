@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block styling %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app_style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+  <div class="app-table-heading">
+    <h1>Users</h1>
+    <a class="add-button" href="add">Add User</a>
+  </div>
+
+  <table class="app-table">
+    <!-- Table Header Row -->
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Firm</th>
+        <th>Role</th>
+        <th>Created On</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <!-- Table Elements (Rows) -->
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.email }}</a></td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.firm.firm_name }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.created_on.strftime("%Y-%m-%d") }}</td>
+        <td class="app-actions">
+          <a class="app-actions-link" href="/users/get/{{ user.email }}">Edit</a>
+          <a class="app-actions-link" href="/users/delete/{{ user.email }}">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+{% endblock %}
