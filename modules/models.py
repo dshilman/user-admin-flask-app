@@ -56,7 +56,7 @@ class Firm(database.Model):
     __tablename__ = "firms"
 
     firm_id = Column(Integer, primary_key=True)
-    firm_name = Column(String, nullable=False)
+    firm_name = Column(String, nullable=False, unique=True)
 
     # Relationship with User
     users = relationship("User", back_populates="firm")

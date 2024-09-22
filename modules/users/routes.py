@@ -66,7 +66,7 @@ def delete(email):
     database.session.commit()
     current_app.logger.debug(f"Deleted user: {email}!")
     flash(f"Thanks, user deleted: {email}!")
-    return redirect(url_for("all"))
+    return redirect(url_for("users.get_users"))
 
 
 @users_blueprint.route("update/", methods=["POST"])
@@ -90,7 +90,6 @@ def update():
                     first_name=form.fname.data,
                     last_name=form.lname.data,
                     role=form.role.data,
-                    trader_id=form.trader_id.data
                 )
                 user.firm = firm
 
