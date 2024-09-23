@@ -14,7 +14,7 @@ Create a new virtual environment:
 
 ```cmd
 cd user-admin-flask-app
-python3 -m venv venv
+python -m venv venv
 ```
 
 Activate the virtual environment:

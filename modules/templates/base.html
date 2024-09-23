@@ -22,8 +22,8 @@
     <nav class="nav">
       {% if current_user.is_authenticated and current_user.role == 'Admin' %}
       <ul class="nav-list">
-        <li class="nav-item"><a class="nav-link" href="../users/all">User List</a></li>
-        <li class="nav-item"><a class="nav-link" href="../users/add">Add New User</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../users/all">User List</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../users/add">Add New User</a></li>
       </ul>
       {% endif %}
       {% if current_user.is_authenticated %}
