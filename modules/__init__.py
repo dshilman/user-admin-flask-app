@@ -11,6 +11,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from flask.cli import AppGroup
+
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -28,6 +30,8 @@ login = LoginManager()
 login.session_protection = "strong"
 login.login_view = "auth.login"
 
+seed_cli = AppGroup('seed')
+
 
 def create_app():
     app = Flask(__name__)
@@ -43,6 +47,20 @@ def create_app():
 
     return app
 
+@seed_cli.command('run')
+def seed_command():
+    """Seeds the database"""
+    print("Seeding database")
+    from data_load import populate_db
+    populate_db()
+    
+@seed_cli.command('clean')
+def seed_clean():
+    """Cleans out the database"""
+    print("Deleting all data")
+    from data_load import clean_db 
+    clean_db()
+ 
 
 def register_blueprints(app: Flask):
     from .auth import auth_blueprint
