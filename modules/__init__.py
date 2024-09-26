@@ -3,7 +3,7 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, Blueprint
 from flask.logging import default_handler
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -13,6 +13,8 @@ from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from flask.cli import AppGroup
 
+
+routes_bp = Blueprint('routes', __name__, template_folder='templates')
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -65,6 +67,9 @@ def seed_clean():
 def register_blueprints(app: Flask):
     from .auth import auth_blueprint
     from .users import users_blueprint
+    from . import routes
+
+    app.register_blueprint(routes_bp, url_prefix="/")
 
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
     app.register_blueprint(users_blueprint, url_prefix="/users")
