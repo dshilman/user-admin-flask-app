@@ -1,99 +1,53 @@
-# Use Admin App
 
-## Installation Instructions
+# User Admin Flask App
 
-### Installation
+A lightweight Flask-based user administration application supporting development and production modes, SQLite database creation and migrations, and convenient Flask CLI utilities.
 
-Pull down the source code from this GitLab repository:
-
-```cmd
+## Installation
+```bash
 git clone https://github.com/dshilman/user-admin-flask-app.git
-```
-
-Create a new virtual environment:
-
-```cmd
 cd user-admin-flask-app
-python -m venv venv
+python3 -m venv venv
+source venv/bin/activate  # Windows: .\venv\Scripts\activate
+cd code
+pip install -r requirements.txt
 ```
 
-Activate the virtual environment:
-
-```cmd
-.\venv\scripts\activate
+## Running the Application
+### Windows
+```bash
+flask --app app --debug run
+```
+### Linux
+```bash
+gunicorn --workers=2 --log-level=info app:app
 ```
 
-Install the python packages specified in requirements.txt:
-
-```cmd
-(venv) cd code
-(venv) pip install -r requirements.txt
-```
-
-Run app on Linux
-```shell
-(venv) gunicorn --workers=2 --log-level=info app:app
-```
-
-Run app on Windows
-```cmd
-(venv) flask --app app --debug run
-```
-
-SQLite DDL Commands
-```cmd
-(venv)$ flask shell
+## Database Commands (SQLite)
+```bash
+flask shell
 >>> from modules import database
 >>> database.drop_all()
 >>> database.create_all()
 >>> quit()
 ```
 
-##Flask CLI
-
-Run Flask App
-```cmd
-(venv)$ flask --app app --debug run
+## Flask Utilities
+```bash
+flask routes
+flask --version
 ```
 
-Flask Version
-```cmd
-(venv)$ flask --version
+## Database Migration
+```bash
+flask db init
+flask db revision --autogenerate -m "message"
+flask db upgrade head
 ```
 
-Flask Routes
-```cmd
-(venv)$ flask routes
-```
-or
-```cmd
-(venv)$ flask shell
->>> print(app.url_map)
-
+## Access SQLite DB
+```bash
+sqlite3 instance/app.db
+.schema
 ```
 
-DB Creation
-```cmd
-(venv)$ flask shell
-
->>> from modules import database
->>> database.drop_all()
->>> database.create_all()
->>> database.metadata.tables.keys() 
->>> database.session.commit()
->>> quit()
-```
-
-DB Migration
-```cmd
-$ flask db init
-$ flask db revision --autogenerate -m "<descriptive message>"
-$ flask db upgrade head
-```
-
-Access SQLLite via sqlite cli
-```cmd
-sqlite3 instance\app.db
-.schema firms
-.schema users
-```
